@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <title>niegoli.gg | Free EMULATOR Online</title>
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body class="mode-menu">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div id="app" class="app" data-view="menu">
+    <!-- ===== MENU / DASHBOARD VIEW ===== -->
+    <div id="dashboardView" class="view dashboard-view menu-view">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"><img src="logo.png" alt="" class="brand-logo" /></span>
+          <h1>niegoli.gg</h1>
+          <span id="brand-count" class="brand-tag">browser console</span>
+        </div>
+        <div class="topbar-actions">
+          <button id="langBtn" class="btn btn-ghost" type="button" aria-haspopup="menu" title="Language">
+            <span id="lang-flag" aria-hidden="true">🇺🇸</span>
+          </button>
+          <button id="suggestBtn" class="btn btn-ghost" type="button" aria-label="Suggest" style="display:none" aria-hidden="true">
+            <span aria-hidden="true">💡</span> <span id="label-suggest">Suggest</span>
+          </button>
+          <button id="changelogBtn" class="btn btn-ghost" type="button" aria-haspopup="dialog" title="Changelog">
+            <span aria-hidden="true">📜</span> <span id="label-changelog">Changelog</span>
+          </button>
+          
+          <button id="settingsBtn" class="btn btn-ghost" type="button" aria-haspopup="dialog">
+            <span aria-hidden="true">⚙</span> <span id="label-settings">Settings</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar" aria-label="Systems">
+          <div class="sidebar-title">Systems</div>
+          <nav id="system-list" class="system-list" role="listbox" aria-label="Choose a system"></nav>
+          <div class="sidebar-footer">
+            <p class="legal"></p>
+          </div>
+        </aside>
+
+        <main id="main" class="main" tabindex="-1">
+          <section class="system-panel" aria-live="polite">
+            <div class="panel-head">
+              <div>
+                <div class="eyebrow" id="system-eyebrow">Select a system</div>
+                <h2 id="system-title">—</h2>
+                <p id="system-desc" class="muted">Pick a console from the sidebar to begin.</p>
+              </div>
+              <div id="system-badge" class="badges"></div>
+            </div>
+
+            <div class="upload-zone" id="upload-zone" aria-label="ROM upload">
+              <input id="rom-input" type="file" hidden />
+              <div class="upload-inner">
+                <div id="upload-icon" class="upload-icon" aria-hidden="true">⬒</div>
+                <div class="upload-text">
+                  <strong id="upload-drop">Drop ROM here</strong>
+                  <span id="upload-browse" class="muted">or click to browse</span>
+                </div>
+                <div id="upload-accept" class="muted small"></div>
+              </div>
+            </div>
+
+            <div class="rom-status" id="rom-status" hidden>
+              <div class="rom-status-info">
+                <span class="dot"></span>
+                <span id="rom-name" class="rom-name"></span>
+                <span id="rom-size" class="muted small"></span>
+              </div>
+              <button id="clear-rom" class="btn btn-ghost btn-sm" type="button">Borrar</button>
+            </div>
+
+            <div class="actions">
+              <button id="launch-btn" class="btn btn-primary btn-lg" type="button" disabled>
+                ▶ Launch Game
+              </button>
+            </div>
+
+            <div id="error-box" class="error-box" hidden role="alert"></div>
+          </section>
+
+          <section id="library-panel" class="library-panel" aria-label="Built-in library">
+            <div class="panel-head">
+              <h3>Biblioteca</h3>
+              <span class="muted small">Para la consola seleccionada</span>
+            </div>
+            <ul id="library-list" class="library-list"></ul>
+            <p id="library-empty" class="muted small" hidden>
+              No hay juegos integrados para esta consola. Añade algunos editando
+              <code>src/library.js</code>.
+            </p>
+          </section>
+
+          <section class="recent-panel" aria-label="Recent games">
+            <div class="panel-head">
+              <h3>Juegos recientes</h3>
+              <button id="clear-recent" class="btn btn-ghost btn-sm" type="button">Borrar todo</button>
+            </div>
+            <ul id="recent-list" class="recent-list"></ul>
+            <p id="recent-empty" class="muted small">
+              Aún no hay juegos recientes. Al lanzar un ROM se recuerda su nombre y consola localmente — los archivos no se almacenan.
+            </p>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- ===== EMULATOR / PLAYER VIEW ===== -->
+    <section id="playerView" class="view player-view emulator-view" aria-hidden="true">
+      <header class="emu-bar">
+        <button id="back-btn" class="btn btn-ghost" type="button">◀ Back to menu</button>
+        <div class="emu-title">
+          <span id="emu-system" class="emu-system"></span>
+          <span id="emu-game" class="emu-game"></span>
+        </div>
+        <div class="emu-actions">
+          <button id="fullscreen-btn" class="btn btn-ghost" type="button">⛶ Fullscreen</button>
+        </div>
+      </header>
+      <div class="emu-stage">
+        <div id="emu-frame-wrap" class="emu-frame-wrap"></div>
+      </div>
+    </section>
+
+    <!-- ===== SETTINGS MODAL ===== -->
+    <div id="settingsModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-panel">
+        <header class="modal-head">
+          <h2 id="settings-title">Settings</h2>
+          <button id="closeSettingsXBtn" class="btn btn-ghost btn-sm" type="button" aria-label="Close">✕</button>
+        </header>
+        <div class="modal-body">
+          <label class="field">
+            <span id="label-accent" class="field-label">Accent color</span>
+            <input id="setting-accent" type="color" value="#ff3b6b" />
+          </label>
+
+          <label class="field">
+            <span id="label-volume" class="field-label">Volume</span>
+            <input id="setting-volume" type="range" min="0" max="1" step="0.05" value="0.5" />
+          </label>
+
+          <label id="label-startonload-wrap" class="field field-row">
+            <input id="setting-startonload" type="checkbox" checked />
+            <span id="label-startonload">Start automatically when game loads</span>
+          </label>
+
+          <label id="label-debug-wrap" class="field field-row">
+            <input id="setting-debug" type="checkbox" />
+            <span id="label-debug">Verbose emulator debug logging</span>
+          </label>
+
+          <label class="field">
+            <span id="label-datapath" class="field-label">EmulatorJS data path</span>
+            <input id="setting-datapath" type="text" spellcheck="false"
+                   value="https://cdn.emulatorjs.org/stable/data/" />
+            <span id="datapath-hint" class="muted small">Leave default unless you self-host EmulatorJS.</span>
+          </label>
+
+
+        </div>
+        <footer class="modal-foot">
+          <button id="settings-reset" class="btn btn-ghost" type="button">Reset</button>
+          <button id="closeSettingsBtn" class="btn btn-primary" type="button">Done</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ACCOUNTS MODAL ===== -->
+  <div id="accountsModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="accounts-title">
+    <div class="modal-panel">
+      <header class="modal-head">
+        <h2 id="accounts-title">Accounts</h2>
+        <button id="closeAccountsXBtn" class="btn btn-ghost btn-sm" type="button" aria-label="Close">✕</button>
+      </header>
+      <div class="modal-body" id="accounts-body" style="min-width:260px;">
+        <div class="field">
+          <div style="font-weight:600">Account (network)</div>
+          <div class="muted small" style="margin-top:6px;">Create a network-backed user — accounts and sessions are stored on the shared network so they are accessible from any page.</div>
+        </div>
+
+        <div class="field" style="display:grid;gap:8px;margin-top:8px;">
+          <label class="field-label">Username</label>
+          <input id="acct-username" type="text" inputmode="text" spellcheck="false" style="padding:8px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg-0);color:var(--text);" />
+          <label class="field-label">Password</label>
+          <input id="acct-password" type="password" inputmode="text" style="padding:8px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg-0);color:var(--text);" />
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px;">
+            <button id="acct-signup" class="btn btn-primary">Sign up</button>
+            <button id="acct-login" class="btn btn-ghost">Log in</button>
+            <button id="acct-logout" class="btn btn-ghost" style="display:none;">Log out</button>
+          </div>
+          <div id="acct-status" class="muted small" style="margin-top:6px;"></div>
+        </div>
+
+        <hr style="border:none;border-top:1px dashed var(--line);margin:12px 0;" />
+
+        <div class="field">
+          <div style="font-weight:600">System account</div>
+          <div id="accounts-info" class="muted small" style="margin-top:6px;">Loading...</div>
+        </div>
+        <div class="field">
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button id="create-system-account" class="btn btn-primary">Create system account</button>
+            <button id="refresh-accounts" class="btn btn-ghost">Refresh</button>
+          </div>
+        </div>
+      </div>
+      <footer class="modal-foot">
+        <div style="width:100%;text-align:left;color:var(--muted);font-size:12px;">
+          System account stores app-level metadata on the shared network.
+        </div>
+        <div></div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===== CHANGELOG MODAL ===== -->
+  <div id="changelogModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="changelog-title">
+    <div class="modal-panel">
+      <header class="modal-head">
+        <h2 id="changelog-title">Changelog</h2>
+        <button id="closeChangelogXBtn" class="btn btn-ghost btn-sm" type="button" aria-label="Close">✕</button>
+      </header>
+      <div class="modal-body" style="max-width:520px;">
+        <div id="changelog-whatsnew" style="font-weight:600;margin-bottom:8px;">What's new</div>
+        <ul id="changelog-list" style="margin:0 0 12px 16px;padding:0;">
+          <li id="changelog-item2">We had to delete suggest because an error. (04/6/2026)</li>
+          <li id="changelog-item3">Added new device: Virtual Boy and new built-in Virtual Boy (VB) ROMs. (03/6/2026)</li>
+        </ul>
+        <div id="changelog-footer" class="muted small"></div>
+      </div>
+      <footer class="modal-foot">
+        <div style="width:100%;text-align:left;color:var(--muted);font-size:12px;">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button id="closeChangelogBtn" class="btn btn-primary btn-sm">Close</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+
+
+  <!-- ===== SUGGESTIONS MODAL ===== -->
+  <div id="suggestModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="suggest-title">
+    <div class="modal-panel">
+      <header class="modal-head">
+        <h2 id="suggest-title">Suggestions</h2>
+        <button id="closeSuggestXBtn" class="btn btn-ghost btn-sm" type="button" aria-label="Close">✕</button>
+      </header>
+      <div class="modal-body">
+        <div class="field">
+          <label id="suggest-label-publish" class="field-label">Publish a suggestion</label>
+          <textarea id="suggest-input" rows="3" placeholder="Short suggestion..." style="resize:none;padding:8px;border-radius:8px;background:var(--bg-0);border:1px solid var(--line-2);color:var(--text);"></textarea>
+          <div style="display:flex;gap:8px;justify-content:flex-end;">
+            <button id="suggest-publish" class="btn btn-primary">Publish</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <h3 id="public-suggestions-title" style="margin:0 0 8px 0;font-size:13px;color:var(--muted);">Public suggestions</h3>
+          <div id="public-suggestions" style="max-height:200px;overflow:auto;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid var(--line);"></div>
+        </div>
+
+
+      </div>
+      <footer class="modal-foot">
+        <div id="suggest-footer" style="width:100%;text-align:left;color:var(--muted);font-size:12px;">
+          Public suggestions are stored as shared comments on the network (collection: "comment").
+        </div>
+        <div></div>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

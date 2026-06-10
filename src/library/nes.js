@@ -1,0 +1,15 @@
+export const NES = [
+  { system: 'nes', title: 'Tecmo Cup (ESP)', file: '1- (ESP) Tecmo Cup - Football Game.nes' },
+  { system: 'nes', title: 'Famidash 1.2.8', file: 'Famidash.v1.2.8.nes' },
+  { system: 'nes', title: 'Super Mario Bros.', file: 'Super Mario Bros (E).nes' },
+  { system: 'nes', title: 'Super Mario Bros. 2', file: 'Super Mario Bros 2 (E) [!].nes' },
+  { system: 'nes', title: 'Super Mario Bros. 3', file: 'Super Mario Bros 3 (U) (PRG 1) [h2].nes' },
+  { system: 'nes', title: "Kirby's Adventure", file: "Kirby's Adventure (E).nes" },
+  { system: 'nes', title: 'Metroid', file: 'Metroid (U).nes' },
+  { system: 'nes', title: 'Zelda II: The Adventure of Link', file: 'Zelda 2 - The Adventure of Link (U).nes' },
+  { system: 'nes', title: 'The Legend of Zelda (PRG1)', file: 'Legend of Zelda, The (U) (PRG1) [!].nes' },
+  { system: 'nes', title: 'Tetris (USA)', file: 'Tetris (USA).nes' },
+  { system: 'nes', title: 'Mega Man', file: 'Mega Man (USA).nes' },
+  { system: 'nes', title: 'Mega Man 2', file: 'Mega Man 2 (USA).nes' },
+  { system: 'nes', title: 'Excitebike', file: 'Excitebike (Europe).nes' },
+];
